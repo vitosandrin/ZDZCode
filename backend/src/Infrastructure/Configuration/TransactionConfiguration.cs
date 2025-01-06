@@ -22,7 +22,7 @@ namespace Infrastructure.Configuration
                    .IsRequired()
                    .HasMaxLength(100);
 
-            builder.Property(t => t.Date)
+            builder.Property(t => t.CreatedAt)
                    .IsRequired();
 
             builder.Property<Guid>("AccountId")
