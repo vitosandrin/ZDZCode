@@ -1,5 +1,4 @@
-﻿using Domain.Aggregates;
-using Infrastructure.Exceptions;
+﻿using Infrastructure.Exceptions;
 using Infrastructure.Repositories;
 using MediatR;
 
