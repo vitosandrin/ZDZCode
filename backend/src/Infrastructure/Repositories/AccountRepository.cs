@@ -8,7 +8,6 @@ namespace Infrastructure.Repositories
     {
         Task<Account> GetByIdAsync(Guid id);
         Task AddAsync(Account account);
-        Task SaveChangesAsync();
     }
 
     public class AccountRepository(AppDbContext context) : IAccountRepository
@@ -21,9 +20,9 @@ namespace Infrastructure.Repositories
                                  .FirstOrDefaultAsync(a => a.Id == id);
 
         public async Task AddAsync(Account account)
-            => await _context.Accounts.AddAsync(account);
-
-        public async Task SaveChangesAsync()
-            => await _context.SaveChangesAsync();
+        {
+            await _context.Accounts.AddAsync(account);
+            await _context.SaveChangesAsync();
+        }
     }
 }
