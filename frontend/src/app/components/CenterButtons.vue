@@ -15,9 +15,6 @@
     </div>
   </template>
   
-  <script>
-  export default {
-    name: "CenterButtons",
-  };
+  <script setup lang="ts">
   </script>
   

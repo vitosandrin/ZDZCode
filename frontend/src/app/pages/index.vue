@@ -1,78 +1,66 @@
 <template>
-  <div class="flex justify-center items-center h-screen relative bg-gray-100">
-    <CenterButtons @openModal="openModal" />
+  <div class="flex flex-col items-center justify-center h-screen bg-gray-800 text-white space-y-4">
+    <button class="px-6 py-3 bg-blue-500 text-white rounded hover:bg-blue-400" @click="openModal('createAccount')">
+      Criar Conta
+    </button>
+    <button class="px-6 py-3 bg-green-500 text-white rounded hover:bg-green-400" @click="openModal('accessAccount')">
+      Acessar Conta
+    </button>
 
-    <Modal
-      v-if="modals.deposit"
-      :visible="modals.deposit"
-      title="Enviar Depósito"
-      placeholder="Valor do Depósito"
-      submitText="Enviar"
-      submitClass="bg-green-500 text-white hover:bg-green-400"
-      @submit="handleDeposit"
-      @close-modal="closeModal('deposit')"
-    />
-    <Modal
-      v-if="modals.withdraw"
-      :visible="modals.withdraw"
-      title="Sacar Dinheiro"
-      placeholder="Valor do Saque"
-      submitText="Sacar"
-      submitClass="bg-red-500 text-white hover:bg-red-400"
-      @submit="handleWithdraw"
-      @close-modal="closeModal('withdraw')"
-    />
-
-    <AccountStatement :transactions="transactions" />
+    <CreateAccountModal v-if="modals.createAccount" :visible="modals.createAccount" title="Criar Conta"
+      submitText="Criar" @submit="handleCreateAccount" @close-modal="closeModal('createAccount')" />
+    <AccessAccountModal v-if="modals.accessAccount" :visible="modals.accessAccount" title="Acessar Conta"
+      submitText="Acessar" @submit="handleAccessAccount" @close-modal="closeModal('accessAccount')" />
   </div>
 </template>
 
-<script>
-import CenterButtons from "@/components/CenterButtons.vue";
-import Modal from "@/components/Modal.vue";
-import AccountStatement from "@/components/AccountStatement.vue";
+<script setup lang="ts">
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import CreateAccountModal from "@/components/form/CreateAccountModal.vue";
+import AccessAccountModal from "@/components/form/AccessAccountModal.vue";
+import { type AccountData } from "@/types/types";
 
-export default {
-  components: {
-    CenterButtons,
-    Modal,
-    AccountStatement,
-  },
-  data() {
-    return {
-      modals: {
-        deposit: false,
-        withdraw: false,
-      },
-      transactions: [
-        { type: "Depósito", amount: 500, date: "2025-01-01" },
-        { type: "Saque", amount: 200, date: "2025-01-03" },
-      ],
-    };
-  },
-  methods: {
-    openModal(modal) {
-      this.modals[modal] = true;
-    },
-    closeModal(modal) {
-      this.modals[modal] = false;
-    },
-    handleDeposit(amount) {
-      this.transactions.push({
-        type: "Depósito",
-        amount,
-        date: new Date().toISOString().split("T")[0],
-      });
-      this.closeModal("deposit");
-    },
-    handleWithdraw(amount) {
-      this.transactions.push({
-        type: "Saque",
-        amount,
-        date: new Date().toISOString().split("T")[0],
-      });
-      this.closeModal("withdraw");
-    },
-  },
+interface Modals {
+  createAccount: boolean;
+  accessAccount: boolean;
+}
+
+const modals = ref<Modals>({
+  createAccount: false,
+  accessAccount: false,
+});
+
+const router = useRouter();
+
+const openModal = (modal: keyof Modals) => {
+  modals.value[modal] = true;
 };
+
+const closeModal = (modal: keyof Modals) => {
+  modals.value[modal] = false;
+};
+
+const handleCreateAccount = async ({ accountNumber, initialDeposit }: AccountData) => {
+  const { error } = await useFetch('https://localhost:7185/api/account', {
+    method: 'POST',
+    body: { accountNumber, initialDeposit },
+  });
+
+  if (!error.value) {
+    router.push(`/account/${accountNumber}`);
+    closeModal("createAccount");
+  }
+};
+
+const handleAccessAccount = async (accountNumber: string) => {
+  router.push(`/account/${accountNumber}`);
+  closeModal("accessAccount");
+};
+
+useSeoMeta({
+  title: "TestBank",
+});
 </script>
+
+<style scoped></style>
