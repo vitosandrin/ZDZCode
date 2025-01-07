@@ -9,7 +9,7 @@
             <label for="amount" class="block text-sm font-medium text-gray-300">
               {{ title }}
             </label>
-            <input id="amount" v-model="amount" type="number"
+            <input id="amount" v-model="amount" type="number" step="0.01" placeholder="0.00"
               class="mt-2 text-black block w-full px-4 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"/>
           </div>
         </div>
