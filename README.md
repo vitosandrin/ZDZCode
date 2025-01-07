@@ -35,7 +35,7 @@ Este projeto é uma aplicação full-stack que envolve um backend em C# com .NET
 4. Após a aplicar as Migrations, inicie o projeto. Execute o comando:
 
    ```bash
-   dotnet run --project API
+   dotnet run --project API --urls https://localhost:7185
    ```
    Esse comando inicia o projeto API.
 
