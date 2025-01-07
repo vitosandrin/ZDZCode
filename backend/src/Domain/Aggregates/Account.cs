@@ -18,6 +18,7 @@
             AccountNumber = accountNumber;
             Balance = initialDeposit;
             _transactions.Add(new Transaction(initialDeposit, "Initial Deposit"));
+            CreatedAt = DateTime.UtcNow;
         }
 
         public void Withdraw(decimal amount)
