@@ -4,6 +4,6 @@
     {
         public sealed record Withdraw(Guid AccountId, decimal Amount);
         public sealed record Deposit(Guid AccountId, decimal Amount);
-        public sealed record ListTransactions(Guid AccountId);
+        public sealed record ListTransactions(string AccountNumber);
     }
 }

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using Application.UseCases.Queries;
-using Domain.Aggregates;
 
 namespace API.Controllers.Transaction
 {
@@ -33,7 +32,7 @@ namespace API.Controllers.Transaction
         [HttpGet]
         public async Task<IActionResult> GetTransactions([FromQuery] Request.ListTransactions request)
         {
-            var transactions = await _mediator.Send(new ListTransactionsQuery(request.AccountId));
+            var transactions = await _mediator.Send(new ListTransactionsQuery(request.AccountNumber));
             return Ok(transactions);
         }
     }
